@@ -33,6 +33,6 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     List<Booking> bookings;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "customer")
     List<Wishlist> wishlists;
 }

@@ -26,6 +26,6 @@ public class Amenity {
     String icon;
     String category;
     boolean isActive;
-    @ManyToMany(mappedBy = "amenity")
+    @ManyToMany(mappedBy = "amenities")
     List<Homestay> homestays;
 }

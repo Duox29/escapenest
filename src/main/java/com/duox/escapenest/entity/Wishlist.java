@@ -21,8 +21,8 @@ public class Wishlist {
     @GeneratedValue(strategy = GenerationType.UUID)
     String wishlist_id;
     @ManyToOne
-    @JoinColumn(name = "user_id",nullable = false)
-    Account user;
+    @JoinColumn(name = "customer_id",nullable = false)
+    Customer customer;
     @Column(nullable = false)
     LocalDateTime createdAt;
     boolean isActive;

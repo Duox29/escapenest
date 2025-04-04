@@ -21,7 +21,7 @@ public class Homestay {
     String homestay_id;
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
-    HomestayOwner owner;
+    HomestayOwner homestay_owner;
     @Column(nullable = false)
     String description;
     @Column(nullable = false)
@@ -44,14 +44,14 @@ public class Homestay {
     boolean isActive;
     @OneToMany(mappedBy = "homestay", cascade = CascadeType.ALL)
     List<HomestayImage> images;
-    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "homestay", cascade = CascadeType.ALL)
     List<HomestayRule> rules;
     @OneToMany(mappedBy = "homestay", cascade = CascadeType.ALL)
     List<Availability> availabilityCalendar;
     @ManyToMany
     @JoinTable(
-            name = "amenity",
-            joinColumns = @JoinColumn(name = "property_id"),
+            name = "homestay_amenities",
+            joinColumns = @JoinColumn(name = "homestay_id"),
             inverseJoinColumns = @JoinColumn(name = "amenity_id")
     )
     List<Amenity> amenities;

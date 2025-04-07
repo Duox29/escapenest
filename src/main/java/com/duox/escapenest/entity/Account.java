@@ -1,10 +1,10 @@
 package com.duox.escapenest.entity;
 
 import com.duox.escapenest.constant.Role;
+import com.duox.escapenest.constant.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.yaml.snakeyaml.DumperOptions;
 
 import java.time.LocalDateTime;
 
@@ -29,7 +29,8 @@ public class Account {
     LocalDateTime dateJoined;
     LocalDateTime lastLogin;
     boolean verified;
-    boolean isActive;
+    boolean active;
+    Status accountStatus;
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
     UserProfile userProfile;
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)

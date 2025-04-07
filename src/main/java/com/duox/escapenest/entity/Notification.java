@@ -27,7 +27,7 @@ public class Notification {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     String message;
-    boolean read;
+    boolean isRead;
 
     String relatedId;
 

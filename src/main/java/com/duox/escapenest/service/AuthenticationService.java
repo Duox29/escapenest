@@ -3,8 +3,10 @@ package com.duox.escapenest.service;
 import com.duox.escapenest.constant.ResultCode;
 import com.duox.escapenest.dto.request.AuthenticationRequest;
 import com.duox.escapenest.dto.request.IntrospectRequest;
+import com.duox.escapenest.dto.request.LoginRequest;
 import com.duox.escapenest.dto.response.AuthencationResponse;
 import com.duox.escapenest.dto.response.IntrospectResponse;
+import com.duox.escapenest.dto.response.LoginResponse;
 import com.duox.escapenest.entity.Account;
 import com.duox.escapenest.exception.AppException;
 import com.duox.escapenest.repository.AccountRepository;
@@ -34,6 +36,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationService {
+    final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     AccountRepository accountRepository;
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -82,5 +85,20 @@ public class AuthenticationService {
         return IntrospectResponse.builder()
                 .valid(verified && expiryTime.after(new Date()))
             .build();
+    }
+
+    //Login
+    public LoginResponse Login(LoginRequest request){
+        log.info("Attempting to login user: {}",request.getEmail());
+        Account account = accountRepository.findAccountsByEmail(request.getEmail())
+                .orElseThrow(() -> new AppException(ResultCode.ACCOUNT_NOT_EXISTED));
+        if(!bCryptPasswordEncoder.matches(request.getPassword(),account.getPasswordHash())){
+            throw new AppException((ResultCode.ACCOUNT_PASSWORD_ERROR));
+        }
+        if(!account.isActive()){
+            throw new AppException(ResultCode.ACCOUNT_NOT_ACTIVATED);
+        }
+        String token = generateToken(account.getEmail());
+        return new LoginResponse(token);
     }
 }

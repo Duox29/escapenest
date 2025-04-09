@@ -32,7 +32,6 @@ public class AccountService {
     final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     AccountRepository accountRepository;
     AccountMapper accountMapper;
-    AuthenticationService authenticationService;
     @NonFinal
     @Value("${jwt.signerKey}")
     String SIGNER_KEY;
@@ -62,25 +61,11 @@ public class AccountService {
         return accountMapper.toAccountResponse(account);
 
     }
-    //Login
-    public LoginResponse Login(LoginRequest request){
-        log.info("Attempting to login user: {}",request.getEmail());
-        Account account = accountRepository.findAccountsByEmail(request.getEmail())
-                .orElseThrow(() -> new AppException(ResultCode.ACCOUNT_NOT_EXISTED));
-        if(!bCryptPasswordEncoder.matches(request.getPassword(),account.getPasswordHash())){
-            throw new AppException((ResultCode.ACCOUNT_PASSWORD_ERROR));
-        }
-        if(!account.isActive()){
-            throw new AppException(ResultCode.ACCOUNT_NOT_ACTIVATED);
-        }
-        String token = authenticationService.generateToken(account.getEmail());
-        return new LoginResponse(token);
-    }
+
     public List<AccountResponse> getAll()
     {
     List<Account> accounts = accountRepository.findAll();
-    return accounts.stream()
-            .map(account -> AccountResponse.builder()
+    return accounts.stream().map(account -> AccountResponse.builder()
                     .email(account.getEmail())
                     .role(account.getRole())
                     .dateJoined(account.getDateJoined())

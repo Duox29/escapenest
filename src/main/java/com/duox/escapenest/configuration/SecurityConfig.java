@@ -4,6 +4,7 @@ import com.duox.escapenest.constant.ResultCode;
 import com.duox.escapenest.dto.response.valueObject.ResultMessage;
 import com.duox.escapenest.util.ResultUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,23 +13,28 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 
+import java.io.IOException;
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     @Autowired
+    private CustomJwtDecoder customJwtDecoder;
+    @Autowired
+    private ObjectMapper objectMapper;
     private static String[] PUBLIC_ENDPOINT = {
             "/account/register",
             "/auth/login"
     };
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, CustomJwtDecoder customJwtDecoder, JwtAuthenticationConverter jwtAuthenticationConverter) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
@@ -40,6 +46,7 @@ public class SecurityConfig {
                     return configuration;
                 }))
                 .csrf(AbstractHttpConfigurer:: disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT).permitAll()
                         .requestMatchers(HttpMethod.GET,PUBLIC_ENDPOINT).permitAll()
@@ -50,15 +57,18 @@ public class SecurityConfig {
                         oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(customJwtDecoder)
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter()))
                                 .authenticationEntryPoint((request, response, authException) -> {
-                                    ResultCode resultCode = ResultCode.UNAUTHENTICATED;
-                                    response.setStatus(resultCode.getHttpStatus().value());
-                                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                                    ResultMessage<?> resultMessage = ResultUtil.error(resultCode);
-                                    ObjectMapper objectMapper = new ObjectMapper();
-                                    response.getWriter().write(objectMapper.writeValueAsString(resultMessage));
-                                    response.flushBuffer();
-                                }));
+                                    handleError(response, ResultCode.UNAUTHENTICATED);
+                                })
+                                .accessDeniedHandler(((request, response, accessDeniedException) ->
+                                        handleError(response, ResultCode.UNAUTHENTICATED)))
+                );
         return httpSecurity.build();
+    }
+    private void handleError(HttpServletResponse response, ResultCode resultCode) throws IOException {
+        response.setStatus(resultCode.getHttpStatus().value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        ResultMessage<?> resultMessage = ResultUtil.error(resultCode);
+        objectMapper.writeValue(response.getWriter(), resultMessage);
     }
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter(){

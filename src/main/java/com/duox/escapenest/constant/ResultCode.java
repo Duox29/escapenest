@@ -1,7 +1,6 @@
 package com.duox.escapenest.constant;
 import org.springframework.http.HttpStatus;
 public enum ResultCode {
-    //Uncategorized error code
     UNCATEGORIZED_EXCEPTION(9999, "Lỗi chưa xác định.", HttpStatus.INTERNAL_SERVER_ERROR),
     ACCOUNT_NOT_EXISTED(1001,"Tài khoản không tồn tại",HttpStatus.NOT_FOUND),
     UNAUTHENTICATED(1002,"Không được xác thực",HttpStatus.UNAUTHORIZED),

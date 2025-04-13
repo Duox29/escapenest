@@ -72,14 +72,13 @@ public class AuthenticationService {
                 .subject(email)
                 .issuer("authentication_service")
                 .issueTime(new Date())
-                .expirationTime(new Date(
-                        Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
+                .expirationTime(Date.from(Instant.now().plus(VALID_DURATION,ChronoUnit.SECONDS)
                 ))
                 .claim("customerClaim","Custom").build();
         Payload payload = new Payload((jwtClaimsSet.toJSONObject()));
         JWSObject jwsObject = new JWSObject(header,payload);
         try {
-            jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
+            jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes(StandardCharsets.UTF_8)));
             return jwsObject.serialize();
         }
         catch (JOSEException e){
@@ -93,6 +92,7 @@ public class AuthenticationService {
         try{
             verifyToken(token,true);
         } catch (Exception e) {
+            log.info("Lỗi là: "+ e.getMessage());
             isValid = false;
         }
         log.info(String.valueOf(isValid));

@@ -5,6 +5,7 @@ import com.duox.escapenest.dto.request.ValidateTokenRequest;
 import com.duox.escapenest.dto.response.ValidateTokenResponse;
 import com.duox.escapenest.exception.AppException;
 import com.duox.escapenest.service.AuthenticationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -15,8 +16,10 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
+@Slf4j
 @Component
 public class CustomJwtDecoder  implements JwtDecoder {
     @Autowired
@@ -33,13 +36,42 @@ public class CustomJwtDecoder  implements JwtDecoder {
             if(!response.isValid()){
                 throw new AppException(ResultCode.UNAUTHENTICATED);
             }
-        } catch (Exception e) {
-            throw new AppException(ResultCode.UNAUTHENTICATED);
+        } catch (AppException e) {
+            throw e;
         }
-        if (Objects.isNull(nimbusJwtDecoder)){
-            SecretKeySpec spec = new SecretKeySpec((signerKey.getBytes()),"HS512");
-            nimbusJwtDecoder = nimbusJwtDecoder.withSecretKey(spec).macAlgorithm(MacAlgorithm.HS512).build();
+        catch (Exception e) {
+            log.error(e.getMessage());
+            throw new AppException(ResultCode.UNAUTHENTICATED,"Token valid error: " + e.getMessage(), e);
         }
-        return nimbusJwtDecoder.decode(token);
+        if (Objects.isNull(nimbusJwtDecoder)) {
+            try {
+                // Sử dụng UTF-8 encoding
+                SecretKeySpec spec = new SecretKeySpec(
+                        signerKey.getBytes(StandardCharsets.UTF_8),
+                        "HS512"
+                );
+                nimbusJwtDecoder = NimbusJwtDecoder
+                        .withSecretKey(spec)
+                        .macAlgorithm(MacAlgorithm.HS512)
+                        .build();
+            } catch (Exception e) {
+                throw new AppException(
+                        ResultCode.UNAUTHENTICATED,
+                        "Decoder initialization failed: " + e.getMessage(),
+                        e
+                );
+            }
+        }
+
+        try {
+            return nimbusJwtDecoder.decode(token);
+        } catch (JwtException e) {
+            // Bọc lỗi decode vào AppException
+            throw new AppException(
+                    ResultCode.UNAUTHENTICATED,
+                    "JWT decoding failed: " + e.getMessage(),
+                    e
+            );
     }
+}
 }

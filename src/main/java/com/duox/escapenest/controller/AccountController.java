@@ -22,7 +22,7 @@ public class AccountController {
     public ResultMessage<AccountResponse> registerAccount(@RequestBody RegistrationRequest request){
         return ResultUtil.data(accountService.registerAccount(request));
     }
-    @GetMapping("/getAll")
+    @GetMapping("/getall")
     List<AccountResponse> getAll(){
         return accountService.getAll();
     }

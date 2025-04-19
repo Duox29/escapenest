@@ -46,7 +46,7 @@ public class EmailService {
             BrevoRequest emailRequest = BrevoRequest.builder()
                     .sender(Sender.builder()
                             .name("EscapeNest")
-                            .email("leduox29@gmail.com")
+                            .email("duong6a123@gmail.com")
                             .build())
                     .to(List.of(Recipient.builder()
                             .email(email)

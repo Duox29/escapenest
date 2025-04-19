@@ -3,10 +3,8 @@ package com.duox.escapenest.service;
 import com.duox.escapenest.constant.ResultCode;
 import com.duox.escapenest.constant.Role;
 import com.duox.escapenest.constant.Status;
-import com.duox.escapenest.dto.request.LoginRequest;
 import com.duox.escapenest.dto.request.RegistrationRequest;
 import com.duox.escapenest.dto.response.AccountResponse;
-import com.duox.escapenest.dto.response.LoginResponse;
 import com.duox.escapenest.entity.Account;
 import com.duox.escapenest.exception.AppException;
 import com.duox.escapenest.mapper.AccountMapper;
@@ -14,9 +12,7 @@ import com.duox.escapenest.repository.AccountRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,12 +28,6 @@ public class AccountService {
     final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     AccountRepository accountRepository;
     AccountMapper accountMapper;
-    @NonFinal
-    @Value("${jwt.signerKey}")
-    String SIGNER_KEY;
-    @NonFinal
-    @Value("${jwt.valid-duration}")
-    int VALID_DURATION;
     //Register
     public AccountResponse registerAccount(RegistrationRequest request){
         if(accountRepository.findAccountsByEmail(request.getEmail()).isPresent()){
@@ -55,7 +45,7 @@ public class AccountService {
         account.setActive(true);
         account.setDateJoined(LocalDateTime.now());
         account.setVerified(false);
-        account.setAccountStatus(Status.UNFINISHED);
+        account.setAccountStatus(Status.UNACTIVATED);
         log.info("Before save - dateJoined: {}, active: {}", account.getDateJoined(), account.isActive());
         accountRepository.save(account);
         return accountMapper.toAccountResponse(account);

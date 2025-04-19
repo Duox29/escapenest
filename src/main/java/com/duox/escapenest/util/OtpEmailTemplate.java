@@ -63,7 +63,7 @@ public class OtpEmailTemplate {
                 
                 <div class="footer">
                     <p>Nếu bạn không yêu cầu mã OTP này, vui lòng bỏ qua email.</p>
-                    <p>Trân trọng,<br><strong>Đội ngũ CarGo</strong></p>
+                    <p>Trân trọng,<br><strong>Đội ngũ EscapeNest</strong></p>
                 </div>
             </div>
         </body>

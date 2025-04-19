@@ -1,4 +1,5 @@
-package com.duox.escapenest.dto.request;
+package com.duox.escapenest.dto.response;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -7,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Recipient {
-    String email;
-    String name;
+public class TokenResponse {
+    String token;
 }

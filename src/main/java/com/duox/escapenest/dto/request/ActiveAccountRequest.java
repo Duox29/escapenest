@@ -1,13 +1,14 @@
 package com.duox.escapenest.dto.request;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Recipient {
+public class ActiveAccountRequest {
     String email;
-    String name;
+    String otp;
 }

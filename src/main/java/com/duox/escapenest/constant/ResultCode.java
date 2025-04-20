@@ -2,6 +2,7 @@ package com.duox.escapenest.constant;
 import org.springframework.http.HttpStatus;
 public enum ResultCode {
     UNCATEGORIZED_EXCEPTION(9999, "Lỗi chưa xác định.", HttpStatus.INTERNAL_SERVER_ERROR),
+    SUCCESS(1000,"Success",HttpStatus.ACCEPTED),
     INVALID_TOKEN(1001,"Invalid token", HttpStatus.BAD_REQUEST),
     TOKEN_EXPIRED(1002,"Token expired",HttpStatus.BAD_REQUEST),
     CANNOT_REFRESH_TOKEN(1003,"Can not refresh token", HttpStatus.BAD_REQUEST),
@@ -13,7 +14,9 @@ public enum ResultCode {
     ACCOUNT_PASSWORD_ERROR(2004,"Mật khẩu hoặc tài khoản không chính xác",HttpStatus.BAD_REQUEST),
     ACCOUNT_SESSION_EXPIRED(2005, "Phiên đăng nhập của tài khoản đã hết hạn, vui lòng đăng nhập lại.", HttpStatus.UNAUTHORIZED),
     ACCOUNT_NOT_ACTIVATED(2006, "Tài khoản chưa được kích hoạt.", HttpStatus.FORBIDDEN),
-    INVALID_OTP(2007,"OTP không hợp lệ", HttpStatus.BAD_REQUEST);
+    INVALID_OTP(2007,"OTP không hợp lệ", HttpStatus.BAD_REQUEST),
+    HOMESTAY_NOT_EXISTED(3001,"Homestay không tồn tại", HttpStatus.BAD_REQUEST),
+    UPLOAD_FAILED(4001,"Upload failed",HttpStatus.BAD_REQUEST);
 
 
     private final Integer code;

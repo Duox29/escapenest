@@ -6,7 +6,6 @@ import com.duox.escapenest.dto.response.valueObject.ResultMessage;
 import com.duox.escapenest.exception.AppException;
 import com.duox.escapenest.service.AccountService;
 import com.duox.escapenest.service.AuthenticationService;
-import com.duox.escapenest.service.EmailService;
 import com.duox.escapenest.service.producer.EmailProducer;
 import com.duox.escapenest.util.ResultUtil;
 import lombok.AccessLevel;
@@ -23,10 +22,6 @@ public class AuthenticationController {
     AccountService accountService;
     EmailProducer emailProducer;
 
-    @PostMapping("/testapi")
-    public ResultMessage<String> testAPI(){
-        return ResultUtil.data("test api");
-    }
     @PostMapping("/login")
     public ResultMessage<LoginResponse> login(@RequestBody LoginRequest request){
         return ResultUtil.data(authenticationService.Login(request));

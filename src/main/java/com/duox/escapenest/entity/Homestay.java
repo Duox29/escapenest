@@ -1,11 +1,9 @@
 package com.duox.escapenest.entity;
-import com.duox.escapenest.constant.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -45,8 +43,6 @@ public class Homestay {
     @OneToMany(mappedBy = "homestay", cascade = CascadeType.ALL)
     List<HomestayImage> images;
     @OneToMany(mappedBy = "homestay", cascade = CascadeType.ALL)
-    List<HomestayRule> rules;
-    @OneToMany(mappedBy = "homestay", cascade = CascadeType.ALL)
     List<Availability> availabilityCalendar;
     @ManyToMany
     @JoinTable(
@@ -55,4 +51,11 @@ public class Homestay {
             inverseJoinColumns = @JoinColumn(name = "amenity_id")
     )
     List<Amenity> amenities;
+    @ManyToMany
+    @JoinTable(
+            name = "homestay_rules",
+            joinColumns = @JoinColumn(name = "homestay_id"),
+            inverseJoinColumns = @JoinColumn(name = "rule_id")
+    )
+    List<Rule> rules;
 }

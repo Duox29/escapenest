@@ -1,11 +1,8 @@
 package com.duox.escapenest.entity;
-import com.duox.escapenest.constant.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -25,7 +22,7 @@ public class Amenity {
     String description;
     String icon;
     String category;
-    boolean isActive;
+    boolean active;
     @ManyToMany(mappedBy = "amenities")
     List<Homestay> homestays;
 }

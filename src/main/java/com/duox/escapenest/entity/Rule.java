@@ -2,22 +2,24 @@ package com.duox.escapenest.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
+
 @Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "homestay_rules")
-public class HomestayRule {
+@Table(name = "rule")
+public class Rule {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    String homestayRule_id;
-
-    @ManyToOne
-    @JoinColumn(name = "homestay_id", nullable = false)
-    Homestay homestay;
+    String rule_id;
     @Column(nullable = false, columnDefinition = "TEXT")
     String ruleDescription;
     boolean major;
+    boolean active;
+    @ManyToMany(mappedBy = "rules")
+    List<Homestay> homestays;
 }

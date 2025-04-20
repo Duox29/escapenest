@@ -31,18 +31,19 @@ public class SecurityConfig {
     private ObjectMapper objectMapper;
     private static String[] PUBLIC_ENDPOINT = {
             "/account/register",
-            "/auth/login"
+            "/auth/login",
+            "/image/**"
     };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(List.of("https://localhost:8080"));
+                    configuration.setAllowedOrigins(List.of("*"));
                     configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
                     configuration.setAllowedHeaders(List.of("*"));
                     configuration.setExposedHeaders(List.of("Authorization","Content-Type"));
-                    configuration.setAllowCredentials(true);
+                    configuration.setAllowCredentials(false);
                     return configuration;
                 }))
                 .csrf(AbstractHttpConfigurer:: disable)

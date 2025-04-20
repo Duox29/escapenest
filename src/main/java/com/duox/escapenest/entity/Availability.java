@@ -1,5 +1,4 @@
 package com.duox.escapenest.entity;
-import com.duox.escapenest.constant.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -33,5 +32,5 @@ public class Availability {
     LocalDateTime createdAt;
     @Column(nullable = false)
     LocalDateTime updatedAt;
-    boolean isActive;
+    boolean active;
 }

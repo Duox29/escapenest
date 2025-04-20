@@ -3,8 +3,6 @@ package com.duox.escapenest.util;
 import com.duox.escapenest.constant.ResultCode;
 import com.duox.escapenest.dto.response.valueObject.ResultMessage;
 
-import java.security.PublicKey;
-
 public class ResultUtil<T> {
     private final ResultMessage<T> resultMessage;
 
@@ -43,4 +41,5 @@ public class ResultUtil<T> {
     public static <T> ResultMessage<T> error(ResultCode resultCode){
         return new ResultUtil<T>().setErrorMsg(resultCode);
     }
+
 }

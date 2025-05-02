@@ -1,9 +1,7 @@
 package com.duox.escapenest.entity;
-import com.duox.escapenest.constant.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

@@ -1,13 +1,9 @@
 package com.duox.escapenest.entity;
 import com.duox.escapenest.constant.PaymentStatus;
-import com.duox.escapenest.constant.Status;
 import jakarta.persistence.*;
-import javafx.fxml.LoadListener;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity

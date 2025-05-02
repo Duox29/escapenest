@@ -5,7 +5,6 @@ import com.duox.escapenest.dto.request.ProfileUpdateRequest;
 import com.duox.escapenest.dto.response.valueObject.UserProfileResponse;
 import com.duox.escapenest.entity.UserProfile;
 import com.duox.escapenest.exception.AppException;
-import com.duox.escapenest.mapper.CustomerMapper;
 import com.duox.escapenest.mapper.UserProfileMapper;
 import com.duox.escapenest.repository.UserProfileRepository;
 import lombok.AccessLevel;
@@ -23,6 +22,8 @@ public class UserProfileService {
     UserProfileMapper userProfileMapper;
 
     public UserProfileResponse updateProfile(ProfileUpdateRequest request){
+        log.info("id: ",request.getProfile_id());
+        log.info("name: ",request.getFirstName());
         UserProfile userProfile = userProfileRepository.findByProfile_id(request.getProfile_id())
                 .orElseThrow(() -> new AppException(ResultCode.ACCOUNT_NOT_EXISTED));
         userProfileMapper.updateProfile(userProfile,request);

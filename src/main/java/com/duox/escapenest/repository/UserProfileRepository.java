@@ -12,4 +12,9 @@ import java.util.Optional;
 public interface UserProfileRepository extends JpaRepository<UserProfile, String> {
     @Query("SELECT up FROM UserProfile up WHERE up.profile_id = :id")
     Optional<UserProfile> findByProfile_id(@Param("id") String id);
+
+    @Query("SELECT up FROM UserProfile up WHERE up.account.account_id = :id")
+    Optional<UserProfile> findByAccount_id(@Param("id") String id);
+    @Query("SELECT up FROM UserProfile up WHERE up.account.email = :email")
+    Optional<UserProfile> findByEmail(@Param("email") String email);
 }

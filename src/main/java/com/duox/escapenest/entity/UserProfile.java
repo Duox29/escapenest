@@ -30,6 +30,7 @@ public class UserProfile {
     String city;
     LocalDate dateOfBirth;
     boolean isActive;
+    @Enumerated(EnumType.STRING)
     Status status;
     @Column(nullable = false)
     LocalDateTime createdAt;

@@ -40,6 +40,7 @@ public class EmailService {
             Random random = new Random();
             String otp = String.format("%06d", 100000 + random.nextInt(900000));
             String redisKey = OTP_PREFIX + email;
+            log.info("REDIS KEY:",redisKey);
             redisTemplate.opsForValue().set(redisKey, String.valueOf(otp),5, TimeUnit.MINUTES);
             String htmlContent = generateOtpEmail(email, otp);
 

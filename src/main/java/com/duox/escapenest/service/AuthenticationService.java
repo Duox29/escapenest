@@ -5,8 +5,10 @@ import com.duox.escapenest.constant.Status;
 import com.duox.escapenest.dto.request.*;
 import com.duox.escapenest.dto.response.*;
 import com.duox.escapenest.entity.Account;
+import com.duox.escapenest.entity.UserProfile;
 import com.duox.escapenest.exception.AppException;
 import com.duox.escapenest.repository.AccountRepository;
+import com.duox.escapenest.repository.UserProfileRepository;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
@@ -39,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 public class AuthenticationService {
     final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     AccountRepository accountRepository;
+    UserProfileRepository userProfileRepository;
     RedisTemplate<String,String> redisTemplate;
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -139,7 +142,32 @@ public class AuthenticationService {
         String token = generateToken(account.getEmail());
         account.setLastLogin(LocalDateTime.now());
         accountRepository.save(account);
-        return new LoginResponse(token);
+        UserProfile userProfile = userProfileRepository.findByAccount_id(account.getAccount_id()).orElseGet(() -> {
+            UserProfile profile = UserProfile.builder()
+                    .account(account)
+                    .firstName("")
+                    .lastName("")
+                    .phoneNumber("")
+                    .imageUrl("")
+                    .bio("")
+                    .address("")
+                    .city("")
+                    .dateOfBirth(null)
+                    .isActive(true)
+                    .status(Status.UNFINISHED)
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
+                    .build();
+            return userProfileRepository.save(profile);
+        });
+
+        log.info("User {} has logged",account.getAccount_id());
+        return LoginResponse.builder()
+                .token(token)
+                .email(account.getEmail())
+                .name(userProfile.getLastName())
+                .role(account.getRole())
+                .build();
     }
     public void logout(String token){
         log.info("Starting logout process for token");
@@ -190,6 +218,7 @@ public class AuthenticationService {
     public ActivateAccountResponse activateAccount(ActiveAccountRequest request)
     {
         String redisKey = OTP_PREFIX + request.getEmail();
+        log.info("1- REDIS KEY:",redisKey);
         String storedOtp = redisTemplate.opsForValue().get(redisKey);
         if(storedOtp != null && storedOtp.equals(request.getOtp())){
             redisTemplate.delete(redisKey);

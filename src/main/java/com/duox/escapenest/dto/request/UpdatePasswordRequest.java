@@ -1,5 +1,4 @@
-package com.duox.escapenest.dto.response;
-import com.duox.escapenest.constant.Role;
+package com.duox.escapenest.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -8,9 +7,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LoginResponse {
-    String token;
+public class UpdatePasswordRequest {
     String email;
-    String name;
-    Role role;
+    String oldPassword;
+    String newPassword;
 }

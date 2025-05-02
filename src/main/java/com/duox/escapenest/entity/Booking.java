@@ -40,9 +40,11 @@ public class Booking {
     BigDecimal cleaningFee;
     @Column(nullable = false)
     BigDecimal serviceFee;
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     BookingStatus status;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     PaymentStatus paymentStatus;
     @Column(nullable = false)
     LocalDateTime createdAt;

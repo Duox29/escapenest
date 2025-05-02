@@ -30,6 +30,7 @@ public class Account {
     LocalDateTime lastLogin;
     boolean verified;
     boolean active;
+    @Enumerated(EnumType.STRING)
     Status accountStatus;
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
     UserProfile userProfile;

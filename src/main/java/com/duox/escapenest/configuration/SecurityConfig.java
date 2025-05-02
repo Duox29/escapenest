@@ -32,7 +32,11 @@ public class SecurityConfig {
     private static String[] PUBLIC_ENDPOINT = {
             "/account/register",
             "/auth/login",
-            "/image/**"
+            "/auth/sendotp",
+            "/auth/activateAccount",
+            "/image/**",
+            "/data/province",
+            "/homestay/findavailablehomestays"
     };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{

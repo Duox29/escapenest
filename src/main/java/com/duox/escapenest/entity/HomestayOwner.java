@@ -3,7 +3,6 @@ import com.duox.escapenest.constant.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,7 +20,9 @@ public class HomestayOwner {
     @OneToOne
     @JoinColumn(name = "account_id", nullable = false)
     Account account;
+    @Enumerated(EnumType.STRING)
     Status status;
+    @Column(nullable = false)
     String businessName;
     boolean identityVerified;
     boolean businessVerified;

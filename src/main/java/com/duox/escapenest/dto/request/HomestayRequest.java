@@ -12,6 +12,8 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class HomestayRequest {
     String homestay_id;
+    String owner_id;
+    String name;
     String description;
     String type;
     String address;

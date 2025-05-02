@@ -1,5 +1,5 @@
-package com.duox.escapenest.constant;
+    package com.duox.escapenest.constant;
 
-public enum Status {
-    UNFINISHED, UNACTIVATED, FINISHED
-}
+    public enum Status {
+        UNFINISHED, UNACTIVATED, FINISHED
+    }
